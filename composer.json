@@ -1,0 +1,13 @@
+{
+    "name": "harpya/metaforms",
+    "description": "Meta form generator and input processor.",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Eduardo Luz",
+            "email": "eduluz1976@gmail.com"
+        }
+    ],
+    "require": {}
+}
