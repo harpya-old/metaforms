@@ -9,5 +9,10 @@
             "email": "eduluz1976@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "harpya\\metaform\\" : "src/"
+        }
+    },    
     "require": {}
 }
