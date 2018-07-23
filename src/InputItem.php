@@ -1,6 +1,6 @@
 <?php
 
-namespace harpya\form;
+namespace harpya\metaform;
 
 
 /**
