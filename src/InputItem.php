@@ -20,7 +20,18 @@ class InputItem {
     protected $description;
     protected $hint;
     
+    /**
+     *
+     * @var Form 
+     */
+    protected $form;
 
+    /**
+     *
+     * @var InputItem 
+     */
+    protected $parent;
+    
 
     /**
      * 
@@ -41,16 +52,49 @@ class InputItem {
         return $id;
     }
     
+    /**
+     * 
+     * @return \harpya\metaform\Form
+     */
+    public function getForm() {
+        return $this->form;
+    }
+    
     
     /**
      * 
-     * @param InputItem $parent
+     * @param \harpya\metaform\Form $form
+     * @param string $code
+     * @param string $title
+     * @param \harpya\metaform\InputItem $parent
      */
-    public function __construct($code=false, $title='',$parent=false) {
+    public function __construct(\harpya\metaform\Form $form = null, $code=false, $title='',InputItem $parent=null) {
+        $ignoreAddItem = false;
+        
+        if ($form) {
+            $this->form = $form;            
+        }
+        
+        
         if ($parent) {
             $parentID = $parent->getID();
+            $parentCode = $parent->code;
+            $this->parent = $parent;  
+            
+            /**
+             * If this item does not have form, but the parent component does, then
+             * just assign the parent's form to this component.
+             */ 
+            if (!$form && $parent->getForm()) {
+                $this->form = $parent->getForm();
+                // But does not perform the auto-add item to this form (because 
+                // was already added by parent container)
+                $ignoreAddItem = true;
+            }
+            
         } else {
             $parentID = false;
+            $parentCode = false;
         }
         $this->id = $this->generateID($parentID);
         self::$mapInputItems[$this->id] = $this;
@@ -58,7 +102,26 @@ class InputItem {
         if (!$code) {
             $code = $this->getID();
         }
+        
+        if ($parentCode) {
+            $code = $parentCode . "." . $code;
+        }
+        
         $this->code = $code;
+        
+        if ($title) {
+            $this->title = $title;
+        }
+        
+        
+        if ($this->getForm() && !$ignoreAddItem) {
+            $this->getForm()->addItem($this);
+        }
+        
+        if ($parentID) {
+            $parent->addChild($this);
+        }
+        
     }
     
     /**
@@ -78,7 +141,19 @@ class InputItem {
      * 
      */
     public function render() {
-        echo " Rendering ". $this->getID();
+        $reg = [
+            'id' => $this->getID(),
+            'code'=>$this->code,
+            'title' => $this->title
+        ];
+        
+        
+        if ($this->getForm()) {
+            $this->getForm()->getView()->assign('field', $reg);
+//        } elseif ($this->parent && $this->parent->getForm()) {
+//            $this->parent->getForm()->getView()->assign('field', $reg);            
+        }
+
     }
     
     
