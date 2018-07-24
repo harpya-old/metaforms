@@ -19,6 +19,8 @@ class InputItem {
     protected $title;
     protected $description;
     protected $hint;
+    protected $value;
+
     
     /**
      *
@@ -31,7 +33,26 @@ class InputItem {
      * @var InputItem 
      */
     protected $parent;
-    
+
+
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param mixed $value
+     * @return $this;
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+        return $this;
+    }
+
 
     /**
      * 
@@ -131,29 +152,52 @@ class InputItem {
     public function getID() {
         return $this->id;
     }
-    
+
+    /**
+     * @param $title
+     * @return $this
+     */
     public function setTitle($title) {
         $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle() {
+        return $this->title;
+    }
+
+    /**
+     * @return bool|int|string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param bool|int|string $code
+     * @return $this;
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+        return $this;
     }
     
-    
+
+
+
+
     /**
      * 
      */
     public function render() {
-        $reg = [
-            'id' => $this->getID(),
-            'code'=>$this->code,
-            'title' => $this->title
-        ];
-        
-        
         if ($this->getForm()) {
-            $this->getForm()->getView()->assign('field', $reg);
-//        } elseif ($this->parent && $this->parent->getForm()) {
-//            $this->parent->getForm()->getView()->assign('field', $reg);            
+            $this->getForm()->getView()->assign('field', $this);
         }
-
     }
     
     
