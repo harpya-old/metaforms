@@ -20,6 +20,7 @@ class InputItem {
     protected $description;
     protected $hint;
     protected $value;
+    protected $isRequired = false;
 
     
     /**
@@ -186,13 +187,34 @@ class InputItem {
         $this->code = $code;
         return $this;
     }
-    
-
-
 
 
     /**
-     * 
+     * @param bool $isRequired
+     */
+    public function setRequired($isRequired=true) {
+        $this->isRequired = $isRequired;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRequired() {
+        return true === $this->isRequired;
+    }
+
+
+    public function getEmptyErrorMessage() {
+        return "";
+    }
+
+    public function getValidationJS() {
+        return '';
+    }
+
+
+    /**
+     *
      */
     public function render() {
         if ($this->getForm()) {

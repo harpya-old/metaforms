@@ -4,7 +4,12 @@
 
         {foreach from=$field->getOptions() item=option}
             <div  class="radio" {if $option->getState()==0}disabled{/if}>
-                <label><input type="radio" name='{$field->getCode()}' value="{$option->getKey()}" {if $option->getState()==0}disabled{/if}>{$option->getValue()}</label>
+                <label>
+                    <input type="radio" name='{$field->getCode()}' value="{$option->getKey()}"
+                              {if $option->getState()==0}disabled{/if}
+                            {if $option->isSelected()}checked{/if}
+                    >{$option->getValue()}
+                </label>
             </div>
         {/foreach}
 

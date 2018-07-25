@@ -1,0 +1,1 @@
+<button type="submit" class="btn {$btn->getType()|default:"btn-primary"}">{$btn->getTitle()}</button>

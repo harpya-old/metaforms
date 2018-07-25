@@ -3,21 +3,28 @@
 namespace harpya\metaform;
 
 class Form {
-    
+
+    protected $id;
     protected $title = '';
     protected $items = [];
     protected $values = [];
     protected $theme = 'default';
     protected $smarty;
-    
+
+    protected $validationJS;
     protected $action;
     protected $method = 'POST';
     protected $contents = '';
     protected $actionBar;
 
 
-
-    public function __construct($action='/', $method='POST') {
+    /**
+     * Form constructor.
+     * @param string $action
+     * @param string $method
+     * @param bool $id
+     */
+    public function __construct($action='/', $method='POST', $id=false) {
         
         $this->smarty = new \Smarty();
         $this->smarty->setCompileDir("../tmp/tpl_compile/");
@@ -25,6 +32,10 @@ class Form {
         
         $this->action = $action;
         $this->method = $method;
+
+        if (!$id) {
+            $this->id = md5(microtime(true));
+        }
     }
     
     /**
@@ -76,6 +87,27 @@ class Form {
         $result = $this->getView()->fetch('form.tpl');
         return $result;
     }
+
+
+
+
+    public function getValidationJS($force=false) {
+        if (!$this->validationJS || $force) {
+
+            $validationJS = '';
+
+            foreach ($this->items as $id => $item) {
+                $validationJS .= $item->getValidationJS();
+            }
+
+            $this->validationJS = trim($validationJS);
+
+        }
+        return $this->validationJS;
+    }
+
+
+
 
     /**
      * @return string
@@ -148,7 +180,7 @@ class Form {
     }
 
     /**
-     * @return mixed
+     * @return ActionBar
      */
     public function getActionBar()
     {
@@ -165,6 +197,35 @@ class Form {
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     * @return Form
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+
+
+
+
+    /**
+     * @return string
+     */
+    public function getScriptJS() {
+        $this->getView()->assign('form',$this);
+        return $this->getView()->fetch('form_script_js.tpl');
+    }
 
 
 

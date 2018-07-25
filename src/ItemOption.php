@@ -13,6 +13,7 @@ class ItemOption {
     protected $value;
     protected $state=1;
 
+    protected $selected = false;
 
     public function __construct($key, $value=null)
     {
@@ -79,6 +80,21 @@ class ItemOption {
     }
 
 
+    /**
+     * @return bool
+     */
+    public function isSelected() {
+        return true === $this->selected;
+    }
+
+    /**
+     * @param bool $state
+     * @return $this
+     */
+    public function setSelected($state=true) {
+        $this->selected = $state;
+        return $this;
+    }
 
 
 
